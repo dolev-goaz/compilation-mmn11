@@ -157,12 +157,14 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 void print_centered(const char* str, size_t width) {
     size_t length = strlen(str);
     if (length > width) {
-        for (int i = 0; i < width - TRUNCATE_SIZE; i++) {
+        // leave space for truncation, and separator
+        for (int i = 0; i < width - TRUNCATE_SIZE - 1; i++) {
             putchar(str[i]);
         }
         for (int i = 0; i < TRUNCATE_SIZE; i++) {
             putchar('.');
         }
+        putchar(' '); // separator
         return;
     }
 
