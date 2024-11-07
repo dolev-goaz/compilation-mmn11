@@ -32,6 +32,6 @@ int main (int argc, char **argv)
         yyin = stdin;
     }
 
-    yylex();
+    yylex(); // since there are no returns, it will just keep lexing
     return 0;
 }
