@@ -1,1 +1,3 @@
 *.lex.exe
+*.lex.c
+*.lex.cpp
