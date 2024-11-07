@@ -1,5 +1,5 @@
 @echo off
-win_flex -o %1.c %1
-gcc -o %1.exe %1.c
+win_flex -o %1.cpp %1
+gcc -Wno-register -o %1.exe %1.cpp
 echo output file: %1.exe
-del %1.c
+del %1.cpp
