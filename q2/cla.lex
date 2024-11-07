@@ -149,6 +149,39 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 . { return UNKNOWN; }
 							   
 %%
+#define TRUNCATE_SIZE 3
+#define TOKEN_WIDTH 15
+#define LEXEME_WIDTH 20
+#define ATTRIBUTE_WIDTH 20
+
+void print_centered(const char* str, size_t width) {
+    size_t length = strlen(str);
+    if (length > width) {
+        for (int i = 0; i < width - TRUNCATE_SIZE; i++) {
+            putchar(str[i]);
+        }
+        for (int i = 0; i < TRUNCATE_SIZE; i++) {
+            putchar('.');
+        }
+        return;
+    }
+
+    size_t lpadding = (width - length) / 2;
+    size_t rpadding = width - length - lpadding;
+    printf("%*s%.*s%*s", lpadding, "", length, str, rpadding, "");
+}
+
+void print_header() {
+    print_centered("token", TOKEN_WIDTH);
+    print_centered("lexeme", LEXEME_WIDTH);
+    print_centered("attribute", ATTRIBUTE_WIDTH);
+    putchar('\n');
+
+    print_centered("-----", TOKEN_WIDTH);
+    print_centered("------", LEXEME_WIDTH);
+    print_centered("---------", ATTRIBUTE_WIDTH);
+    putchar('\n');
+}
 
 void print_unknown_token() {
     fprintf(stderr, "Unrecognized token '%c'(%d) at line %d.", *yytext, *yytext, line);
@@ -196,6 +229,7 @@ int main (int argc, char **argv)
 
     yyin = fopen(argv[1], "r");
 
+    print_header();
     while ((token = yylex()) != 0){
         print_token(token);
         putchar('\n');
