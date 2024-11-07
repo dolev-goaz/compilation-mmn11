@@ -39,7 +39,10 @@ typedef enum {
 
   // identifier & number
   IDENTIFIER,
-  NUMBER
+  NUMBER,
+
+  // unknown token
+  UNKNOWN
 } TokenType;
 
 const char* token_strings[] = {
@@ -71,7 +74,8 @@ const char* token_strings[] = {
     "NOT",
     "CAST",
     "IDENTIFIER",
-    "NUMBER"
+    "NUMBER",
+    "UNKNOWN"
 };
 
 
@@ -142,11 +146,13 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 <C_STYLE_COMMENT>[\n]+     { line += yyleng; }
 <C_STYLE_COMMENT>"*"+    { /* skip  *'s. */ } 
 
-.          { fprintf (stderr, "line %d: unrecognized token %c(%x)\n", 
-                               line, yytext[0], yytext[0]); }
+. { return UNKNOWN; }
 							   
 %%
 
+void print_unknown_token() {
+    fprintf(stderr, "Unrecognized token '%c'(%d) at line %d.", *yytext, *yytext, line);
+}
 
 void print_token_attributes(TokenType type) {
     switch (type) {
@@ -170,12 +176,15 @@ void print_token_attributes(TokenType type) {
 }
 
 void print_token(TokenType type) {
+    if (type == UNKNOWN) {
+        print_unknown_token();
+        return;
+    }
     const char* token = token_strings[type];
     printf("%s, %s,", token, yytext);
     print_token_attributes(type);
 }
 
-// TODO: error token
 int main (int argc, char **argv)
 {
     int token;

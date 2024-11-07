@@ -7,6 +7,8 @@ input(x);
 input(y);
 output(x + y);
 
+UNKNOWN_TOKENS
+
 /* Assignment and Arithmetic Expressions */
 z = x + y;
 a = 3.14 * b;
