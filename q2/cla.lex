@@ -42,13 +42,46 @@ typedef enum {
   NUMBER
 } TokenType;
 
-union {
-  double numeric_value;
+const char* token_strings[] = {
+    "",
+    "BREAK",
+    "CASE",
+    "DEFAULT",
+    "ELSE",
+    "FLOAT",
+    "IF",
+    "INPUT",
+    "INT",
+    "OUTPUT",
+    "SWITCH",
+    "WHILE",
+    "LPAREN",
+    "RPAREN",
+    "LCURLY",
+    "RCURLY",
+    "COMMA",
+    "COLON",
+    "SEMICOLON",
+    "EQ",
+    "RELOP",
+    "ADDOP",
+    "MULOP",
+    "OR",
+    "AND",
+    "NOT",
+    "CAST",
+    "IDENTIFIER",
+    "NUMBER"
+};
+
+
+union token_attribute {
+  float numeric_value;
   char string_value[MAX_STRING_SIZE];
   char cast_type[MAX_CAST_TYPE_SIZE];
   char single_op;
   char relop[MAX_RELOP_SIZE];
-} attribute;
+} token_attribute;
 
 #include <string.h> 
 #include <stdlib.h>
@@ -86,19 +119,19 @@ while   { return KW_WHILE; }
 =  { return EQ; }
 
  /* operators */
-"!="|[><]|[>=<]=  { strcpy(attribute.relop, yytext); return RELOP; }
-[+-]              { attribute.single_op = yytext[0]; return ADDOP; }
-[*/]              { attribute.single_op = yytext[0]; return MULOP; }
+"!="|[><]|[>=<]=  { strcpy(token_attribute.relop, yytext); return RELOP; }
+[+-]              { token_attribute.single_op = yytext[0]; return ADDOP; }
+[*/]              { token_attribute.single_op = yytext[0]; return MULOP; }
 "||"              { return OR; }
 &&                { return AND; }
 !                 { return NOT; }
 cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext) - 6; /* copy from offset 5(after <), and we ignore 6 characters(cast<>) */
-                    strncpy(attribute.cast_type, start, read_count);
-                    attribute.cast_type[read_count] = 0;
+                    strncpy(token_attribute.cast_type, start, read_count);
+                    token_attribute.cast_type[read_count] = 0;
                     return CAST; }
 
-[0-9]+(\.?[0-9]*)     { attribute.numeric_value = atof(yytext); return NUMBER; }
-[a-zA-Z][a-zA-Z0-9]*  { strcpy (attribute.string_value, yytext); return IDENTIFIER; }
+[0-9]+(\.?[0-9]*)     { token_attribute.numeric_value = atof(yytext); return NUMBER; }
+[a-zA-Z][a-zA-Z0-9]*  { strcpy (token_attribute.string_value, yytext); return IDENTIFIER; }
 
 [\t\r ]+  { /* skip white space */ }
 [\n]+     { line += yyleng; /* line += strlen(yytext); */ }
@@ -114,29 +147,50 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 							   
 %%
 
+
+void print_token_attributes(TokenType type) {
+    switch (type) {
+        case NUMBER:
+            printf("%f", token_attribute.numeric_value);
+            break;
+        case IDENTIFIER:
+            printf("%s", token_attribute.string_value);
+            break;
+        case CAST:
+            printf("%s", token_attribute.cast_type);
+            break;
+        case ADDOP:
+        case MULOP:
+            printf("%c", token_attribute.single_op);
+            break;
+        case RELOP:
+            printf("%s", token_attribute.relop);
+            break;
+    } 
+}
+
+void print_token(TokenType type) {
+    const char* token = token_strings[type];
+    printf("%s, %s,", token, yytext);
+    print_token_attributes(type);
+}
+
+// TODO: error token
 int main (int argc, char **argv)
 {
-   extern FILE *yyin;
-   int token;
+    int token;
 
-   if (argc != 2) {
-      fprintf(stderr, "Usage: %s <input file name>\n", argv [0]);
-      exit (1);
-   }
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <input file name>\n", argv [0]);
+        exit (1);
+    }
 
-   yyin = fopen (argv[1], "r");
+    yyin = fopen(argv[1], "r");
 
-  // TODO: test the tokenizing
-   while ((token = yylex ()) != 0) {}
-  //    switch (token) {
-	//  case NUM: printf("NUMBER : %d\n", attribute.ival);
-	//               break;
-  //        case ID:     printf ("ID  : %s\n", attribute.name);
-	//               break;
-	//  case STRING: printf ("STRING: %s\n", attribute.str);
-	//               break;
-  //        default:     fprintf (stderr, "error ... \n"); exit (1);
-  //    } 
-   fclose (yyin);
-   exit (0);
+    while ((token = yylex()) != 0){
+        print_token(token);
+        putchar('\n');
+    }
+   fclose(yyin);
+   exit(0);
 }
