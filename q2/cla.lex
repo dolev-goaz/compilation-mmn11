@@ -188,24 +188,29 @@ void print_unknown_token() {
 }
 
 void print_token_attributes(TokenType type) {
+    char attribute_str[MAX_STRING_SIZE]; // longest buffer
     switch (type) {
         case NUMBER:
-            printf("%.6g", token_attribute.numeric_value);
+            snprintf(attribute_str, sizeof(attribute_str), "%.6g", token_attribute.numeric_value);
             break;
         case IDENTIFIER:
-            printf("%s", token_attribute.string_value);
+            snprintf(attribute_str, sizeof(attribute_str), "%s", token_attribute.string_value);
             break;
         case CAST:
-            printf("%s", token_attribute.cast_type);
+            snprintf(attribute_str, sizeof(attribute_str), "%s", token_attribute.cast_type);
             break;
         case ADDOP:
         case MULOP:
-            printf("%c", token_attribute.single_op);
+            snprintf(attribute_str, sizeof(attribute_str), "%c", token_attribute.single_op);
             break;
         case RELOP:
-            printf("%s", token_attribute.relop);
+            snprintf(attribute_str, sizeof(attribute_str), "%s", token_attribute.relop);
             break;
-    } 
+        default:
+            attribute_str[0] = '\0';  // unexpected type
+            break;
+    }
+    print_centered(attribute_str, ATTRIBUTE_WIDTH);
 }
 
 void print_token(TokenType type) {
@@ -214,7 +219,8 @@ void print_token(TokenType type) {
         return;
     }
     const char* token = token_strings[type];
-    printf("%s, %s,", token, yytext);
+    print_centered(token, TOKEN_WIDTH);
+    print_centered(yytext, LEXEME_WIDTH);
     print_token_attributes(type);
 }
 
