@@ -151,7 +151,7 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 void print_token_attributes(TokenType type) {
     switch (type) {
         case NUMBER:
-            printf("%f", token_attribute.numeric_value);
+            printf("%.6g", token_attribute.numeric_value);
             break;
         case IDENTIFIER:
             printf("%s", token_attribute.string_value);
