@@ -27,7 +27,7 @@ int main (int argc, char **argv)
     }
 
     if (!yyin) {
-        char* message = (argc == 2)? "Error opening file": "No file provided";
+        const char* message = (argc == 2)? "Error opening file": "No file provided";
         printf("%s. Using stdin\n", message);
         yyin = stdin;
     }
