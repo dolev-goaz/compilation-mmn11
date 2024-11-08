@@ -1,0 +1,184 @@
+Dolev Goaz - 322263369
+     token            lexeme            attribute      
+     -----            ------            ---------      
+  IDENTIFIER            x                   x          
+     COMMA              ,                              
+  IDENTIFIER            y                   y          
+     COMMA              ,                              
+  IDENTIFIER            z                   z          
+     COLON              :                              
+      INT              int                             
+   SEMICOLON            ;                              
+  IDENTIFIER            a                   a          
+     COMMA              ,                              
+  IDENTIFIER            b                   b          
+     COLON              :                              
+     FLOAT            float                            
+   SEMICOLON            ;                              
+     INPUT            input                            
+    LPAREN              (                              
+  IDENTIFIER            x                   x          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+     INPUT            input                            
+    LPAREN              (                              
+  IDENTIFIER            y                   y          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+    OUTPUT            output                           
+    LPAREN              (                              
+  IDENTIFIER            x                   x          
+     ADDOP              +                   +          
+  IDENTIFIER            y                   y          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+  IDENTIFIER         UNKNOWN             UNKNOWN       
+
+  IDENTIFIER          TOKENS              TOKENS       
+  IDENTIFIER            z                   z          
+      EQ                =                              
+  IDENTIFIER            x                   x          
+     ADDOP              +                   +          
+  IDENTIFIER            y                   y          
+   SEMICOLON            ;                              
+  IDENTIFIER            a                   a          
+      EQ                =                              
+    NUMBER             3.14                3.14        
+     MULOP              *                   *          
+  IDENTIFIER            b                   b          
+   SEMICOLON            ;                              
+      IF                if                             
+    LPAREN              (                              
+  IDENTIFIER            x                   x          
+     RELOP              ==                  ==         
+  IDENTIFIER            y                   y          
+    RPAREN              )                              
+    LCURLY              {                              
+    OUTPUT            output                           
+    LPAREN              (                              
+  IDENTIFIER            z                   z          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+    RCURLY              }                              
+     ELSE              else                            
+    LCURLY              {                              
+    OUTPUT            output                           
+    LPAREN              (                              
+  IDENTIFIER            x                   x          
+     ADDOP              -                   -          
+  IDENTIFIER            y                   y          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+    RCURLY              }                              
+     WHILE            while                            
+    LPAREN              (                              
+  IDENTIFIER            x                   x          
+     RELOP              >                   >          
+    NUMBER              0                   0          
+    RPAREN              )                              
+    LCURLY              {                              
+  IDENTIFIER            x                   x          
+      EQ                =                              
+  IDENTIFIER            x                   x          
+     ADDOP              -                   -          
+    NUMBER              1                   1          
+   SEMICOLON            ;                              
+    RCURLY              }                              
+    SWITCH            switch                           
+    LPAREN              (                              
+  IDENTIFIER            z                   z          
+    RPAREN              )                              
+    LCURLY              {                              
+     CASE              case                            
+    NUMBER              1                   1          
+     COLON              :                              
+    OUTPUT            output                           
+    LPAREN              (                              
+  IDENTIFIER            z                   z          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+     BREAK            break                            
+   SEMICOLON            ;                              
+     CASE              case                            
+    NUMBER              2                   2          
+     COLON              :                              
+  IDENTIFIER            z                   z          
+      EQ                =                              
+  IDENTIFIER            z                   z          
+     MULOP              *                   *          
+    NUMBER              2                   2          
+   SEMICOLON            ;                              
+     BREAK            break                            
+   SEMICOLON            ;                              
+    DEFAULT          default                           
+     COLON              :                              
+    OUTPUT            output                           
+    LPAREN              (                              
+    NUMBER              0                   0          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+    RCURLY              }                              
+      IF                if                             
+    LPAREN              (                              
+  IDENTIFIER            x                   x          
+     RELOP              !=                  !=         
+  IDENTIFIER            y                   y          
+      AND               &&                             
+  IDENTIFIER            y                   y          
+     RELOP              >=                  >=         
+  IDENTIFIER            z                   z          
+      OR                ||                             
+      NOT               !                              
+    LPAREN              (                              
+  IDENTIFIER            a                   a          
+     RELOP              <                   <          
+  IDENTIFIER            b                   b          
+    RPAREN              )                              
+    RPAREN              )                              
+    LCURLY              {                              
+  IDENTIFIER            z                   z          
+      EQ                =                              
+  IDENTIFIER            x                   x          
+     ADDOP              +                   +          
+  IDENTIFIER            y                   y          
+   SEMICOLON            ;                              
+    RCURLY              }                              
+  IDENTIFIER            a                   a          
+      EQ                =                              
+     CAST          cast<float>            float        
+    LPAREN              (                              
+  IDENTIFIER            x                   x          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+  IDENTIFIER            b                   b          
+      EQ                =                              
+     CAST           cast<int>              int         
+    LPAREN              (                              
+  IDENTIFIER            a                   a          
+    RPAREN              )                              
+     MULOP              *                   *          
+    NUMBER             2.5                 2.5         
+   SEMICOLON            ;                              
+    LCURLY              {                              
+  IDENTIFIER            x                   x          
+      EQ                =                              
+    NUMBER              10                  10         
+   SEMICOLON            ;                              
+  IDENTIFIER            y                   y          
+      EQ                =                              
+    NUMBER              20                  20         
+   SEMICOLON            ;                              
+    LCURLY              {                              
+  IDENTIFIER            z                   z          
+      EQ                =                              
+  IDENTIFIER            x                   x          
+     MULOP              *                   *          
+  IDENTIFIER            y                   y          
+   SEMICOLON            ;                              
+    OUTPUT            output                           
+    LPAREN              (                              
+  IDENTIFIER            z                   z          
+    RPAREN              )                              
+   SEMICOLON            ;                              
+    RCURLY              }                              
+    RCURLY              }                              
