@@ -18,6 +18,8 @@
     #define OUTPUT_FILENAME "output.txt"
 #endif
 
+#define PROGRAM_SIGNATURE "Dolev Goaz - 322263369"
+
 typedef enum {
   // keywords
   KW_BREAK = 1,
@@ -197,7 +199,7 @@ void print_header() {
 
 // gets called when an unknown token was found. Error message
 void print_unknown_token() {
-    fprintf(stderr, "Unrecognized token '%c'(%d) at line %d.", *yytext, *yytext, line);
+    fprintf(stderr, "Unrecognized token '%c'(%d) at line %d.\n", *yytext, *yytext, line);
 }
 
 // extracts the relevant token attribute and prints it, centered.
@@ -250,6 +252,12 @@ void assert_validate_file_extension(const char* filename) {
     exit (1);
 }
 
+// prints program signature
+void print_signature() {
+    fprintf(stderr, "%s\n", PROGRAM_SIGNATURE);
+    fprintf(OUTPUT_STREAM, "%s\n", PROGRAM_SIGNATURE);
+}
+
 int main (int argc, char **argv)
 {
     TokenType token;
@@ -263,13 +271,18 @@ int main (int argc, char **argv)
     // if we use file output, open the file handler
     yyout = fopen(OUTPUT_FILENAME, "w");
     if (!yyout) {
-        fprintf(stderr, "Error while opening output file %s\n", OUTPUT_FILENAME);
+        fprintf(stderr, "Error while opening output file '%s'\n", OUTPUT_FILENAME);
         return 1;
     }
 #endif
 
 
     yyin = fopen(argv[1], "r");
+    if (!yyin) {
+        fprintf(stderr, "Error while opening input file '%s'\n", argv[1]);
+        return 1;
+    }
+    print_signature();
 
     print_header();
     while ((token = yylex()) != 0){
