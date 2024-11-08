@@ -101,9 +101,7 @@ int line = 1;
 %}
 
 %option noyywrap
-%option yylineno
 
-/* exclusive start conditions -- deal with two types of comments */ 
 %x C_STYLE_COMMENT
 
 %%
@@ -150,7 +148,7 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 
 "/*"  { BEGIN(C_STYLE_COMMENT); }
 <C_STYLE_COMMENT>[^*\n]+    { /* skip chars in comment */ }
-<C_STYLE_COMMENT>"*"+"/"  { BEGIN(0); }  // better
+<C_STYLE_COMMENT>"*"+"/"  { BEGIN(INITIAL); }  // better
 <C_STYLE_COMMENT>[\n]+     { line += yyleng; }
 <C_STYLE_COMMENT>"*"+    { /* skip  *'s. */ } 
 
