@@ -4,6 +4,14 @@
 #define MAX_CAST_TYPE_SIZE 6 // float = 5 + 1 terminating
 #define MAX_RELOP_SIZE 3 // >= = 2 + 1 terminating
 
+// #define USE_STDOUT // can toggle this on or off
+#ifdef USE_STDOUT
+    #define OUTPUT_STREAM stdout
+#else
+    #define OUTPUT_STREAM yyout
+    #define OUTPUT_FILENAME "output.txt"
+#endif
+
 typedef enum {
   // keywords
   KW_BREAK = 1,
@@ -159,30 +167,30 @@ void print_centered(const char* str, size_t width) {
     if (length > width) {
         // leave space for truncation, and separator
         for (int i = 0; i < width - TRUNCATE_SIZE - 1; i++) {
-            putchar(str[i]);
+            fputc(str[i], OUTPUT_STREAM);
         }
         for (int i = 0; i < TRUNCATE_SIZE; i++) {
-            putchar('.');
+            fputc('.', OUTPUT_STREAM);
         }
-        putchar(' '); // separator
+        fputc(' ', OUTPUT_STREAM); // separator
         return;
     }
 
     size_t lpadding = (width - length) / 2;
     size_t rpadding = width - length - lpadding;
-    printf("%*s%.*s%*s", lpadding, "", length, str, rpadding, "");
+    fprintf(OUTPUT_STREAM, "%*s%.*s%*s", lpadding, "", length, str, rpadding, "");
 }
 
 void print_header() {
     print_centered("token", TOKEN_WIDTH);
     print_centered("lexeme", LEXEME_WIDTH);
     print_centered("attribute", ATTRIBUTE_WIDTH);
-    putchar('\n');
+    fputc('\n', OUTPUT_STREAM);
 
     print_centered("-----", TOKEN_WIDTH);
     print_centered("------", LEXEME_WIDTH);
     print_centered("---------", ATTRIBUTE_WIDTH);
-    putchar('\n');
+    fputc('\n', OUTPUT_STREAM);
 }
 
 void print_unknown_token() {
@@ -228,6 +236,13 @@ void print_token(TokenType type) {
 
 int main (int argc, char **argv)
 {
+#ifndef USE_STDOUT
+    yyout = fopen(OUTPUT_FILENAME, "w");
+    if (!yyout) {
+        fprintf(stderr, "Error while opening output file %s\n", OUTPUT_FILENAME);
+        return 1;
+    }
+#endif
     int token;
 
     if (argc != 2) {
@@ -240,8 +255,13 @@ int main (int argc, char **argv)
     print_header();
     while ((token = yylex()) != 0){
         print_token(token);
-        putchar('\n');
+        fputc('\n', yyout);
     }
    fclose(yyin);
+
+#ifndef USE_STDOUT
+    fclose(yyout);
+#endif
+
    exit(0);
 }
