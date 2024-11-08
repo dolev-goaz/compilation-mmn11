@@ -162,6 +162,7 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 #define LEXEME_WIDTH 20
 #define ATTRIBUTE_WIDTH 20
 
+// prints a string at the center of 'width', padded by white-spaces
 void print_centered(const char* str, size_t width) {
     size_t length = strlen(str);
     if (length > width) {
@@ -181,6 +182,7 @@ void print_centered(const char* str, size_t width) {
     fprintf(OUTPUT_STREAM, "%*s%.*s%*s", lpadding, "", length, str, rpadding, "");
 }
 
+// prints the header of the 'token info table'
 void print_header() {
     print_centered("token", TOKEN_WIDTH);
     print_centered("lexeme", LEXEME_WIDTH);
@@ -193,10 +195,12 @@ void print_header() {
     fputc('\n', OUTPUT_STREAM);
 }
 
+// gets called when an unknown token was found. Error message
 void print_unknown_token() {
     fprintf(stderr, "Unrecognized token '%c'(%d) at line %d.", *yytext, *yytext, line);
 }
 
+// extracts the relevant token attribute and prints it, centered.
 void print_token_attributes(TokenType type) {
     char attribute_str[MAX_STRING_SIZE]; // longest buffer
     switch (type) {
@@ -223,6 +227,7 @@ void print_token_attributes(TokenType type) {
     print_centered(attribute_str, ATTRIBUTE_WIDTH);
 }
 
+// prints the data of the token
 void print_token(TokenType type) {
     if (type == UNKNOWN) {
         print_unknown_token();
@@ -237,6 +242,7 @@ void print_token(TokenType type) {
 int main (int argc, char **argv)
 {
 #ifndef USE_STDOUT
+    // if we use file output, open the file handler
     yyout = fopen(OUTPUT_FILENAME, "w");
     if (!yyout) {
         fprintf(stderr, "Error while opening output file %s\n", OUTPUT_FILENAME);
