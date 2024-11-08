@@ -239,8 +239,26 @@ void print_token(TokenType type) {
     print_token_attributes(type);
 }
 
+// if the filename doesnt end with ".ou", exit the program.
+void assert_validate_file_extension(const char* filename) {
+    const char* dot = strrchr(filename, '.');
+    if (dot && (strcmp(dot + 1, "ou") == 0)) {
+        // dot exists, extension matches
+        return;
+    }
+    fprintf(stderr, "ERROR: Input file extension should be .ou\n", filename);
+    exit (1);
+}
+
 int main (int argc, char **argv)
 {
+    int token;
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <input file name>.ou\n", argv [0]);
+        exit (1);
+    }
+    assert_validate_file_extension(argv[1]);
+
 #ifndef USE_STDOUT
     // if we use file output, open the file handler
     yyout = fopen(OUTPUT_FILENAME, "w");
@@ -249,12 +267,7 @@ int main (int argc, char **argv)
         return 1;
     }
 #endif
-    int token;
 
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <input file name>\n", argv [0]);
-        exit (1);
-    }
 
     yyin = fopen(argv[1], "r");
 
