@@ -1,5 +1,11 @@
 %{
+// table printing
+#define TRUNCATE_SIZE 3
+#define TOKEN_WIDTH 15
+#define LEXEME_WIDTH 20
+#define ATTRIBUTE_WIDTH 20
 
+// buffer sizes for attributes
 #define MAX_STRING_SIZE 512
 #define MAX_CAST_TYPE_SIZE 6 // float = 5 + 1 terminating
 #define MAX_RELOP_SIZE 3 // >= = 2 + 1 terminating
@@ -155,10 +161,6 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 . { return UNKNOWN; }
 							   
 %%
-#define TRUNCATE_SIZE 3
-#define TOKEN_WIDTH 15
-#define LEXEME_WIDTH 20
-#define ATTRIBUTE_WIDTH 20
 
 // prints a string at the center of 'width', padded by white-spaces
 void print_centered(const char* str, size_t width) {
@@ -250,7 +252,7 @@ void assert_validate_file_extension(const char* filename) {
 
 int main (int argc, char **argv)
 {
-    int token;
+    TokenType token;
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <input file name>.ou\n", argv [0]);
         exit (1);
