@@ -106,6 +106,7 @@ union token_attribute {
 #include <string.h> 
 #include <stdlib.h>
 int line = 1;
+int comment_line = -1; // initial value doesn't really matter, since we only use it after initializing it
 %}
 
 %option noyywrap
@@ -154,11 +155,15 @@ cast<(int|float)> { char* start = yytext + 5; size_t read_count = strlen(yytext)
 [\t\r ]+  { /* skip white space */ }
 [\n]+     { line += yyleng; /* line += strlen(yytext); */ }
 
-"/*"  { BEGIN(C_STYLE_COMMENT); }
+"/*"  { comment_line = line; BEGIN(C_STYLE_COMMENT); }
 <C_STYLE_COMMENT>[^*\n]+    { /* skip chars in comment */ }
-<C_STYLE_COMMENT>"*"+"/"  { BEGIN(INITIAL); }  // better
+<C_STYLE_COMMENT>"*"+"/"  { BEGIN(INITIAL); }  //
 <C_STYLE_COMMENT>[\n]+     { line += yyleng; }
 <C_STYLE_COMMENT>"*"+    { /* skip  *'s. */ } 
+
+ /* validating comments- using comment_line for error info */
+<C_STYLE_COMMENT>"/*" { fprintf(stderr, "Error: No nested comments! Initial comment starts in line %d, nested comment in line %d\n", comment_line, line); }
+<C_STYLE_COMMENT><<EOF>> { fprintf(stderr, "Error: Unterminated comment beginning in line %d!\n", comment_line); }
 
 . { return UNKNOWN; }
 							   
