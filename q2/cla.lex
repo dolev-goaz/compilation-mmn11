@@ -244,6 +244,7 @@ void print_token(TokenType type) {
     print_centered(token, TOKEN_WIDTH);
     print_centered(yytext, LEXEME_WIDTH);
     print_token_attributes(type);
+    fputc('\n', yyout);
 }
 
 // if the filename doesnt end with ".ou", exit the program.
@@ -292,9 +293,8 @@ int main (int argc, char **argv)
     print_header();
     while ((token = yylex()) != 0){
         print_token(token);
-        fputc('\n', yyout);
     }
-   fclose(yyin);
+    fclose(yyin);
 
 #ifndef USE_STDOUT
     fclose(yyout);

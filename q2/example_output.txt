@@ -33,7 +33,6 @@ Dolev Goaz - 322263369
     RPAREN              )                              
    SEMICOLON            ;                              
   IDENTIFIER         UNKNOWN             UNKNOWN       
-
   IDENTIFIER          TOKENS              TOKENS       
   IDENTIFIER            z                   z          
       EQ                =                              
